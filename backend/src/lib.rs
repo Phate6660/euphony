@@ -3,8 +3,10 @@ use libc::c_char;
 use std::ffi::CStr;
 
 #[no_mangle]
-pub extern fn play(path: *const c_char) {
-    let path = unsafe { CStr::from_ptr(path).to_str().unwrap() };
+/// # Safety
+/// This function is unsafe because it may dereference the pointer to the string passed to it.
+pub unsafe extern fn play(path: *const c_char) {
+    let path = CStr::from_ptr(path).to_str().unwrap();
     let (_stream, stream_handle) = OutputStream::try_default().unwrap();
     let sink = rodio::Sink::try_new(&stream_handle).unwrap();
     println!("Playing: {}", path);
