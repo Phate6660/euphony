@@ -5,11 +5,11 @@
 (require racket/cmdline ffi/unsafe)
 
 (define backend-lib (ffi-lib "backend/target/release/libbackend.so"))
-(define backend-play (get-ffi-obj "play" backend-lib (_fun _string -> _void)))
+(define backend-play (get-ffi-obj "main_helper" backend-lib (_fun _string _string -> _void)))
 
 (define audio-file (make-parameter 'file))
 
 (command-line
   #:program "Euphony"
   #:once-any
-  [("-p" "--play") str "Play the given file" (backend-play str)])
+  [("-p" "--play") str "Play the given file" (backend-play "play" str)])
